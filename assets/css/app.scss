@@ -1,3 +1,63 @@
 body {
     background-color: lightgray;
+    margin: 1em auto; width: 95%; font: 16px/1.5 sans-serif;
+}
+
+div.page-wrapper {
+
+}
+
+div.agendaDay, div.agendaHeader{
+    display: grid;
+    grid-template-columns: repeat(12, 1fr) ;
+    grid-gap: 0;
+    width: 1200px;
+}
+
+div.agendaHeader {
+    div.hour{
+        height: 30px;
+        background-color: #bed0d9;
+    }
+}
+
+div.agendaDay {
+    div.hour{
+        border: solid 1px #888;
+        height: 40px;
+    }
+}
+
+div.agendaDayWrapper {
+    position: relative;
+
+    div.agendaDayDate {
+        position: absolute;
+        left: 0;
+        top: 2px;
+        font-size: 10px;
+    }
+
+    div.event {
+        position: absolute;
+        top: 5px;
+        border-radius: 3px;
+        background: #0c6d0c;
+        padding: 5px;
+        box-sizing: border-box;
+        height: 30px;
+        width: 200px;
+    }
+
+    div.availableSlot {
+        position: absolute;
+        top: 5px;
+        border-radius: 3px;
+        border: dotted 1px #0c6d0c;
+        background: #bacbba;
+        padding: 5px;
+        box-sizing: border-box;
+        height: 30px;
+        cursor: pointer;
+    }
 }

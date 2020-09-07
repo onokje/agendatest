@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -35,6 +37,16 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private ?string $email;
+
+    /**
+     * @ORM\OneToMany(targetEntity=AgendaEvent::class, mappedBy="user")
+     */
+    private $agendaEvents;
+
+    public function __construct()
+    {
+        $this->agendaEvents = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -115,6 +127,37 @@ class User implements UserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AgendaEvent[]
+     */
+    public function getAgendaEvents(): Collection
+    {
+        return $this->agendaEvents;
+    }
+
+    public function addAgendaEvent(AgendaEvent $agendaEvent): self
+    {
+        if (!$this->agendaEvents->contains($agendaEvent)) {
+            $this->agendaEvents[] = $agendaEvent;
+            $agendaEvent->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAgendaEvent(AgendaEvent $agendaEvent): self
+    {
+        if ($this->agendaEvents->contains($agendaEvent)) {
+            $this->agendaEvents->removeElement($agendaEvent);
+            // set the owning side to null (unless already changed)
+            if ($agendaEvent->getUser() === $this) {
+                $agendaEvent->setUser(null);
+            }
+        }
 
         return $this;
     }

@@ -37,7 +37,7 @@ class Agenda
     /**
      * @ORM\OneToMany(targetEntity=AgendaEvent::class, mappedBy="agenda")
      */
-    private ArrayCollection $agendaEvents;
+    private Collection $agendaEvents;
 
     public function __construct()
     {

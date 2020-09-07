@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\AgendaEvent;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +18,18 @@ class AgendaEventRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, AgendaEvent::class);
+    }
+
+    public function getItemsByDateAndUser(\DateTimeInterface $dateTime, User $user): array
+    {
+        return $this->createQueryBuilder('e')
+            ->Where('e.startsAt LIKE :date')
+            ->andWhere('e.user = :user')
+            ->setParameter(':date', $dateTime->format('Y-m-d') . "%")
+            ->setParameter(':user', $user)
+            ->orderBy('e.startsAt', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     // /**

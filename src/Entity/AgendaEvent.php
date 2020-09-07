@@ -23,11 +23,7 @@ class AgendaEvent
      */
     private ?Agenda $agenda;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="agendaEvents")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private ?User $user;
+
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -43,6 +39,12 @@ class AgendaEvent
      * @ORM\Column(type="datetime")
      */
     private ?\DateTimeInterface $endsAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="agendaEvents")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?User $user;
 
     public function getId(): ?int
     {
@@ -61,17 +63,7 @@ class AgendaEvent
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
 
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     public function getTitle(): ?string
     {
@@ -107,5 +99,27 @@ class AgendaEvent
         $this->endsAt = $endsAt;
 
         return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getStartTime(): string
+    {
+        return $this->startsAt->format('G:i');
+    }
+
+    public function getEndTime(): string
+    {
+        return $this->endsAt->format('G:i');
     }
 }
