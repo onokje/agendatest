@@ -32,6 +32,16 @@ class AgendaEventRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function save(AgendaEvent $agendaEvent)
+    {
+        $this->getEntityManager()->persist($agendaEvent);
+        $this->getEntityManager()->flush();
+    }
+
     // /**
     //  * @return AgendaEvent[] Returns an array of AgendaEvent objects
     //  */

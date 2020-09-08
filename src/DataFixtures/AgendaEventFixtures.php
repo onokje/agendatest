@@ -44,6 +44,30 @@ class AgendaEventFixtures extends Fixture implements DependentFixtureInterface
         $event->setTitle('event3');
         $manager->persist($event);
 
+        $event = new AgendaEvent();
+        $event->setAgenda($agenda);
+        $event->setUser($user);
+        $event->setStartsAt(new \DateTime('2020-09-12 7:30:00'));
+        $event->setEndsAt(new \DateTime('2020-09-12 9:30:00'));
+        $event->setTitle('event4');
+        $manager->persist($event);
+
+        $event = new AgendaEvent();
+        $event->setAgenda($agenda);
+        $event->setUser($user);
+        $event->setStartsAt(new \DateTime('2020-09-13 11:30:00'));
+        $event->setEndsAt(new \DateTime('2020-09-13 13:30:00'));
+        $event->setTitle('event5');
+        $manager->persist($event);
+
+        $event = new AgendaEvent();
+        $event->setAgenda($agenda);
+        $event->setUser($user);
+        $event->setStartsAt(new \DateTime('2020-09-13 14:00:00'));
+        $event->setEndsAt(new \DateTime('2020-09-13 16:00:00'));
+        $event->setTitle('event6');
+        $manager->persist($event);
+
         $manager->flush();
     }
 

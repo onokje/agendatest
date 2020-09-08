@@ -28,7 +28,7 @@
                 {% endfor %}
 
                 {% for slot in agendaDay['availableSlots'] %}
-                    <div class="availableSlot" style="left: {{ timeToOffset(slot['start']) }}px; width: {{ slotWidth(slot) }}px"></div>
+                    <a class="availableSlot" href="{{ path('agenda_new', {'datetime' : slot['startDateTime']|date('Y-m-d H:i:s')}) }}" style="left: {{ timeToOffset(slot['start']) }}px; width: {{ slotWidth(slot) }}px"></a>
                 {% endfor %}
 
             </div>
@@ -36,6 +36,9 @@
         {% endfor %}
 
     </div>
+
+    <a href="{{ path('agenda', {'year' : agenda.prevWeek|date('Y'), 'month' : agenda.prevWeek|date('n'), 'day' : agenda.prevWeek|date('j')}) }}">Prev. week</a> |
+    <a href="{{ path('agenda', {'year' : agenda.nextWeek|date('Y'), 'month' : agenda.nextWeek|date('n'), 'day' : agenda.nextWeek|date('j')}) }}">Next. week</a>
 
 </div>
 {% endblock %}

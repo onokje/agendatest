@@ -33,7 +33,7 @@ class CalenderService
 
             $events = $this->repository->getItemsByDateAndUser($date, $this->security->getUser());
 
-            $daysArray[] = ['date' => $date, 'events' => $events, 'availableSlots' => $this->determineAvailableTimeSlots($events)];
+            $daysArray[] = ['date' => $date, 'events' => $events, 'availableSlots' => $this->determineAvailableTimeSlots($events, $date)];
         }
 
         return $daysArray;
@@ -44,10 +44,14 @@ class CalenderService
      * @param $events AgendaEvent[]
      * @return array of slots (['start' => 'starttime', 'end' => 'endtime'])
      */
-    private function determineAvailableTimeSlots($events): array
+    private function determineAvailableTimeSlots($events, \DateTimeInterface $date): array
     {
         if (!count($events)) {
-            return [['start' => '7:00', 'end' => '17:00']];
+            return [[
+                'start' => '7:00',
+                'end' => '17:00',
+                'startDateTime' => new \DateTimeImmutable(sprintf('%s %s:00', $date->format('Y-m-d'), '7:00'))
+            ]];
         }
 
         $slots = [];
@@ -57,9 +61,11 @@ class CalenderService
             $startTimeInMins = $this->calendarHelper->convertTimeToMinutes($event->getStartTime());
             $newNextAvailable = $nextAvailable + $this->calendarHelper->convertTimeToMinutes(self::EVENT_LENGTH) + self::BREAK_MINUTES;
             if ($startTimeInMins > $newNextAvailable && $newNextAvailable < $this->calendarHelper->convertTimeToMinutes('17:00')) {
+                $startTime = $this->calendarHelper->convertMinutesToTime($nextAvailable);
                 $slots[] = [
-                    'start' => $this->calendarHelper->convertMinutesToTime($nextAvailable),
-                    'end' => $this->calendarHelper->convertMinutesToTime($startTimeInMins - self::BREAK_MINUTES)
+                    'start' => $startTime,
+                    'end' => $this->calendarHelper->convertMinutesToTime($startTimeInMins - self::BREAK_MINUTES),
+                    'startDateTime' => new \DateTimeImmutable(sprintf('%s %s:00', $date->format('Y-m-d'), $startTime))
                 ];
 
             }
@@ -68,9 +74,11 @@ class CalenderService
 
         // check if there is enough time after the last event
         if ($nextAvailable < $this->calendarHelper->convertTimeToMinutes('15:00')) {
+            $startTime = $this->calendarHelper->convertMinutesToTime($nextAvailable);
             $slots[] = [
-                'start' => $this->calendarHelper->convertMinutesToTime($nextAvailable),
-                'end' => '17:00'
+                'start' => $startTime,
+                'end' => '17:00',
+                'startDateTime' => new \DateTimeImmutable(sprintf('%s %s:00', $date->format('Y-m-d'), $startTime))
             ];
         }
 
@@ -83,8 +91,18 @@ class CalenderService
         $today = new \DateTimeImmutable();
         return [
             'days' => $this->buildCalendar($date),
-            'nextweek' => $date->add(new \DateInterval("P1W")),
+            'prevWeek' => $date->sub(new \DateInterval("P1W")),
+            'nextWeek' => $date->add(new \DateInterval("P1W")),
             'today' => $today
         ];
+    }
+
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function addEvent(AgendaEvent $agendaEvent)
+    {
+        $this->repository->save($agendaEvent);
     }
 }

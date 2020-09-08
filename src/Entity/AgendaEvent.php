@@ -19,11 +19,9 @@ class AgendaEvent
 
     /**
      * @ORM\ManyToOne(targetEntity=Agenda::class, inversedBy="agendaEvents")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private ?Agenda $agenda;
-
-
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -62,8 +60,6 @@ class AgendaEvent
 
         return $this;
     }
-
-
 
     public function getTitle(): ?string
     {
