@@ -1,3 +1,11 @@
+# agenda test
+
+Requirements:
+- a working webserver with php 7.4. The symfony cli can be used for development.
+- composer installed
+- NodeJS installed (version 12.x or higher)
+- a database backend, sqlite can be used for quick setup
+
 ## Installation
 - run `composer install` to install php dependencies
 - run `npm i` to install NodeJS dependencies
@@ -10,7 +18,7 @@
 ## Database
 - setup your database of choice. Default is to use sqlite. See below.
 - execute the database migrations by running `php bin/console d:m:m`
-- load database fixtures by running: `php bin/console doctrine:fixtures:load`
+- load database fixtures by running: `php bin/console d:fixtures:load`
 
 #### sqlite setup
 - install sqlite driver to use sqlite (on ubuntu/debian): `sudo apt install php7.4-sqlite3`
@@ -21,3 +29,4 @@
 ## Running the app
 - run server: `symfony server:start`
 - open browser at `http://localhost:8000`
+- login with `monteur1@agenda.nl`, password `welkom123`
